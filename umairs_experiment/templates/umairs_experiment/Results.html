@@ -1,0 +1,116 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Results of round {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+    <p>
+    Round {{ subsession.round_number }} has now concluded.
+    </p>
+    <p>
+    Your assigned type in this round was {{ player.int_pref }}.
+    </p>
+    <p>
+    Your reported type in this round was {{ player.exp_pref }}.
+    </p>
+
+    <p>
+    Your neighbours' reported types in this round were:
+    </p>
+
+{% if player.id_in_group == 1 %}
+    <p>
+    -   Participant number 2 reported {{ exp_pref_2 }}.
+    </p>
+    <p>
+    -   Participant number 3 reported {{ exp_pref_3 }}.
+    </p>
+    <p>
+    -   Participant number 4 reported {{ exp_pref_4 }}.
+    </p>
+    <p>
+    -   Participant number 6 reported {{ exp_pref_6 }}.
+    </p>
+{% endif %}
+
+{% if player.id_in_group == 2 %}
+    <p>
+    -   Participant number 1 reported {{ exp_pref_1 }}.
+    </p>
+    <p>
+    -   Participant number 3 reported {{ exp_pref_3 }}.
+    </p>
+    <p>
+    -   Participant number 4 reported {{ exp_pref_4 }}.
+    </p>
+    <p>
+    -   Participant number 5 reported {{ exp_pref_5 }}.
+    </p>
+{% endif %}
+
+{% if player.id_in_group == 3 %}
+    <p>
+    -   Participant number 1 reported {{ exp_pref_1 }}.
+    </p>
+    <p>
+    -   Participant number 2 reported {{ exp_pref_2 }}.
+    </p>
+    <p>
+    -   Participant number 5 reported {{ exp_pref_5 }}.
+    </p>
+{% endif %}
+
+{% if player.id_in_group == 4 %}
+    <p>
+    -   Participant number 1 reported {{ exp_pref_1 }}.
+    </p>
+    <p>
+    -   Participant number 2 reported {{ exp_pref_2 }}.
+    </p>
+    <p>
+    -   Participant number 6 reported {{ exp_pref_6 }}.
+    </p>
+{% endif %}
+
+{% if player.id_in_group == 5 %}
+    <p>
+    -   Participant number 2 reported {{ exp_pref_2 }}.
+    </p>
+    <p>
+    -   Participant number 3 reported {{ exp_pref_3 }}.
+    </p>
+{% endif %}
+
+{% if player.id_in_group == 6 %}
+    <p>
+    -   Participant number 1 reported {{ exp_pref_1 }}.
+    </p>
+    <p>
+    -   Participant number 4 reported {{ exp_pref_4 }}.
+    </p>
+{% endif %}
+
+    <p>
+    Your earnings for this round are therefore {{ player.payoff }}.
+    </p>
+
+    <p>
+    Your total earnings so far are {{ total_payoff }}.
+
+    </p>
+
+{% if subsession.round_number == Constants.num_rounds %}
+<p><h3>Experiment has ended!</h3></p>
+<p>Please click on the "Next" button below to proceed to the survey which will collect your demographic information.</p>
+<p>Once you have completed this survey, your cash payoff (i.e. the amount of money (in US $) you have earned from participating in this experiment) will be revealed to you.</p>
+{% endif %}
+
+<p></p>
+
+
+    {% next_button %}
+
+{% endblock %}

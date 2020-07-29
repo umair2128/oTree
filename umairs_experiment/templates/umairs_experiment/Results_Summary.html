@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Cash Payoff
+{% endblock %}
+
+{% block content %}
+
+<p>You total earnings from participating in this experiment = {{ total_payoff }}.</p>
+
+<p>The exchange rate is given by:</p>
+    <p>36 points = 1 US $.</p>
+
+<p>Your total earnings in US$ are therefore = {{ total_cash_payoff }}.</p>
+
+<p>Your cash payoff (total earnings in US$ + participation fee of $4) = {{ participant.payoff_plus_participation_fee }}.</p>
+
+{% endblock %}

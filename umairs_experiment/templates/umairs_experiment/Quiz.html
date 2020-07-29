@@ -1,0 +1,83 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block content %}
+<p>Please read the following questions carefully and select the correct answer choice for each.</p>
+<p></p>
+<p>{% formfield player.a_1 label="<b>1.</b> There are a total of 6 participants in this experiment." %}</p>
+<p>{% formfield player.a_2 label="<b>2.</b> The total number of rounds for this experiment are ____." %}</p>
+<p>{% formfield player.a_3 label="<b>3.</b> The minimum number of neighbours a participant can have in this experiment are ____." %}</p>
+<p>{% formfield player.a_4 label="<b>4.</b> ____ is the maximum number of neighbours a participant can have in this experiment." %}</p>
+<p>{% formfield player.a_5 label="<b>5.</b> At the end of each round, participants get randomly re-assigned to nodes within the network." %}</p>
+<p>{% formfield player.a_6 label="<b>6.</b> In each round, a participant can observe their own assigned type as well as the assigned types of their neighbours." %}</p>
+<p>{% formfield player.a_7 label="<b>7.</b> The number of points a participant can earn in each round, apart from being determined by their own assigned and reported types, are affected by the reported types of their neighbours only (and not by the reported types of all other participants in the network)." %}</p>
+<p>{% formfield player.a_8 label="<b>8.</b> In round 1 of the experiment, all participants are assigned type X." %}</p>
+<p>{% formfield player.a_9 label="<b>9.</b> Beginning from round 2, only one participant in each round will have their assigned type swtiched from X to Y by the experimenter." %}</p>
+<p>{% formfield player.a_10 label="<b>10.</b> After switching a participant's assigned type from X to Y, the experimenter can switch their assigned type back to X in any of the subsequent rounds." %}</p>
+<p>
+<style>
+    #largeImage1 {position: absolute;height:30%;width:40%;padding: .5em;background: #e3e3e3;border: 1px solid #BFBFBF;}
+</style>
+
+
+<a id="earnings4" href="https://umairsexperiment.s3.us-east-2.amazonaws.com/four_neighbours.PNG" %}">Show the relevant earnings table for Question 11.</a>
+
+<script>
+    var offsetX = 20;
+    var offsetY = 10;
+
+    $('a').hover(function(e) {
+        var href = $(this).attr('href');
+        $('<img id="largeImage1" src="' + href + '" alt="big image" />')
+        .css('top', e.pageY + offsetY)
+        .css('left', e.pageX + offsetX)
+        .appendTo('body');
+    }, function() {
+        $('#largeImage1').remove();
+    });
+
+    $('a').mousemove(function(e) {
+        $('#largeImage2').remove();
+        $("#largeImage1").css('top', e.pageY + offsetY).css('left', e.pageX + offsetX);
+    });
+</script>
+</p>
+<p>{% formfield player.a_11 label="<b>11.</b> Suppose that a participant has 4 neighbours and his/her assigned type during a round is X. Further, suppose that 1 neighbour of this participant report their type as X and the remaining 3 report Y as their type. What will be the earning of this participant if s/he reports X as his/her type in this round?" %}</p>
+<p>
+<style>
+    #largeImage2 {position: absolute;height:30%;width:40%;padding: .5em;background: #e3e3e3;border: 1px solid #BFBFBF;}
+</style>
+
+
+<a id="earnings3" href="https://umairsexperiment.s3.us-east-2.amazonaws.com/three_neighbours.PNG">Show the relevant earnings table for Question 12.</a>
+
+<script>
+    var offsetX = 20;
+    var offsetY = 10;
+
+    $('a').hover(function(f) {
+        var href = $(this).attr('href');
+        $('<img id="largeImage2" src="' + href + '" alt="big image" />')
+        .css('top', f.pageY + offsetY)
+        .css('left', f.pageX + offsetX)
+        .appendTo('body');
+    }, function() {
+        $('#largeImage2').remove();
+    });
+
+    $('a').mousemove(function(f) {
+        $("#largeImage2").css('top', f.pageY + offsetY).css('left', f.pageX + offsetX);
+    });
+</script>
+</p>
+<p>{% formfield player.a_12 label="<b>12.</b> Now suppose that a participant has 3 neighbours and his/her assigned type during a round is Y. Further, suppose that 2 neighbours of this participant report their type as X and the remaining neighbour reports Y as their type. What will be the earning of this participant if s/he reports X as his/her type in this round?" %}</p>
+<p>{% formfield player.a_13 label="<b>13.</b> The conversion rate between points received and the cash amount paid is given by:" %}</p>
+<p>{% formfield player.a_14 label="<b>14.</b> The participation fee (or show-up fee) for this experiment is $4." %}</p>
+
+<p>Click on the "Next" button below to submit your answers and see the result of the quiz.</p>
+
+{% next_button %}
+{% endblock %}
+

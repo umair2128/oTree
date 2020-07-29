@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Demographic Survey
+{% endblock %}
+
+{% block content %}
+<p>For each of the following questions, please select the most relevant answer choice.</p>
+
+<p>{% formfield player.s_1 label="<b>1.</b> What is your age in completed years?" %}</p>
+
+<p>{% formfield player.s_2 label="<b>2.</b> What is your gender?" %}</p>
+
+<p>{% formfield player.s_3 label="<b>3.</b> What is your ethnicity?" %}</p>
+
+<p>{% formfield player.s_4 label="<b>4.</b> What is your marital status?" %}</p>
+
+<p>Click on the "Next" button below to submit your responses and go to the page showing the amount of money (in US$) you have earned from participating in this experiment.</p>
+
+<p></p>
+
+{% next_button %}
+
+{% endblock %}

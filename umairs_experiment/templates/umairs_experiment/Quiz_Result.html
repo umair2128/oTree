@@ -1,0 +1,117 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Quiz Result{% endblock %}
+
+{% block content %}
+
+<p>Please review the result of your quiz before proceeding further.</p>
+
+<p></p>
+
+ <div style="max-height:60vh; overflow: auto;">
+            <table class="table table-sm table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr >
+                    <th style="text-align: center; font-size:0.8rem; vertical-align:middle;"> <p>Question #</p></th>
+                    <th style="text-align: center; font-size:0.8rem; vertical-align:middle;"> <p>Statement of the Question</p></th>
+                    <th style="text-align: center; font-size:0.8rem; vertical-align:middle;"> <p>Your answer</p></th>
+                    <th style="text-align: center; font-size:0.8rem; vertical-align:middle;"> <p>Correct answer</p></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 1 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> There are a total of 6 participants in this experiment.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_1 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_1 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 2 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> The total number of rounds for this experiment are ____.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_2 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_2 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 3 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> The minimum number of neighbours a participant can have in this experiment are ____.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_3 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_3 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 4 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> ____ is the maximum number of neighbours a participant can have in this experiment.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_4 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_4 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 5 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> At the end of each round, participants get randomly re-assigned to nodes within the network.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_5 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_5 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 6 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> In each round, a participant can observe their own assigned type as well as the assigned types of their neighbours.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_6 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_6 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 7 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> The number of points a participant can earn in each round, apart from being determined by their own assigned and reported types, are affected by the reported types of their neighbours only (and not by the reported types of all other participants in the network).  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_7 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_7 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 8 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> In round 1 of the experiment, all participants are assigned type X.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_8 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_8 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 9 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> Beginning from round 2, only one participant in each round will have their assigned type swtiched from X to Y by the experimenter.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_9 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_9 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 10 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> After switching a participant's assigned type from X to Y, the experimenter can switch their assigned type back to X in any of the subsequent rounds.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_10 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_10 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 11 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> Suppose that a participant has 4 neighbours and his/her assigned type during a round is X. Further, suppose that 1 neighbour of this participant report their type as X and the remaining 3 report Y as their type. What will be the earning of this participant if s/he reports X as his/her type in this round?  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_11 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_11 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 12 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> Now suppose that a participant has 3 neighbours and his/her assigned type during a round is Y. Further, suppose that 2 neighbours of this participant report their type as X and the remaining neighbour reports Y as their type. What will be the earning of this participant if s/he reports X as his/her type in this round?  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_12 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_12 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 13 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> The conversion rate between points received and the cash amount paid is given by:  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_13 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_13 }}  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; font-size: 1 rem; vertical-align: middle;  "> 14 </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> The participation fee (or show-up fee) for this experiment is $4.  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ a_14 }}  </td>
+                        <td style="text-align: center; font-size: 0.9rem; vertical-align: middle; "> {{ Constants.q_14 }}  </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+<p>
+
+</p>
+<p>Click on the "Next" button below to begin the experiment.</p>
+
+{% next_button %}
+{% endblock %}
