@@ -1,0 +1,253 @@
+{% load otree %}
+
+    {% if nothing_to_report != True %}
+
+        {% if exp_ended == 0 %}
+
+            <h1>The experiment is currently underway. This page will be updated after the experiment has ended.</h1>
+
+        {% else %}
+
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+            <link rel="stylesheet" href="/resources/demos/style.css">
+            <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+            <table width="100%">
+              <tr>
+                <td width="5%" valign="top" align="center">
+                    {% if 'demand' in session.config.experiment %}
+                        <div><input type="text" id="amount_h" readonly style="font-size:14px; width:100px; border:0; text-align:center; vertical-align:top; color:#0000FF; font-weight:bold;"><p></p></div>
+                    {% else %}
+                        <div><input type="text" id="amount_h" readonly style="font-size:14px; width:100px; border:0; text-align:center; vertical-align:top; color:#FF0000; font-weight:bold;"><p></p></div>
+                    {% endif %}
+                    <div id="slider-range" style="width:12px; height:280px;"></div>
+                    {% if 'demand' in session.config.experiment %}
+                        <div><p></p><input type="text" id="amount_l" readonly style="font-size:14px; width:100px; border:0; text-align:center; vertical-align:bottom; color:#0000FF; font-weight:bold;"></div>
+                    {% else %}
+                        <div><p></p><input type="text" id="amount_l" readonly style="font-size:14px; width:100px; border:0; text-align:center; vertical-align:bottom; color:#FF0000; font-weight:bold;"></div>
+                    {% endif %}
+                </td>
+                <td width="95%">
+                  <div id="container"></div>
+                </td>
+              </tr>
+            </table>
+
+            {% if 'demand' in session.config.experiment %}
+                <p class="highcharts-description" align="justify">
+                    The graph shown above was created by gathering all bid prices, arranging them from
+                    the highest to the lowest and then displaying them. The table below represents the
+                    arranged list of bid prices used to construct this graph.
+                </p>
+            {% else %}
+                <p class="highcharts-description" align="justify">
+                    The graph shown above was created by gathering all ask prices, arranging them from
+                    the lowest to the highest and then displaying them. The table below represents the
+                    arranged list of ask prices used to construct this graph.
+                </p>
+            {% endif %}
+
+            <script>
+              $(function() {
+                  $('#container').highcharts({
+                    chart: {
+                      zoomType: 'y'
+                    },
+                    title: {
+                    {% if 'demand' in session.config.experiment %}
+                        text: 'Demand curve resulting from the experiment'
+                    {% else %}
+                        text: 'Supply curve resulting from the experiment'
+                    {% endif %}
+                    },
+                    legend: {
+                      enabled: true
+                    },
+                    credits: {
+                      enabled: false
+                    },
+                    xAxis: {
+                      title: {
+                        text: 'quantity',
+                            },
+                      min: 0,
+                      tickInterval: 1,
+                    },
+                    yAxis: {
+                      min: 0,
+                      max: {{bids_largest}}+{{bids_smallest}},
+                      tickInterval: 1,
+                      title: {
+                        text: 'price',
+                      }
+                    },
+                    plotOptions: {
+                      series: {
+                        pointStart: 0,
+                        {% if 'demand' in session.config.experiment %}
+                            color: '#0000FF',
+                        {% else %}
+                            color: '#FF0000',
+                        {% endif %}
+                        marker: {
+                          enabled: false
+                        },
+                        enableMouseTracking: false
+                      }
+                    },
+                    exporting: {
+                      enabled: false
+                    },
+                    {% if 'demand' in session.config.experiment %}
+                        series: [{
+                          name: 'Demand Curve',
+                          data: {{bids_graph}},
+                          step: true
+                          },
+                          {
+                          name: 'vertical_line_min',
+                          showInLegend:false,
+                          data: [{x:{{num_players}}, y:{{bids_smallest}}},
+                                 {x:{{num_players}}, y:0}
+                                ]
+                          },
+                          {
+                          name: 'vertical_line_max',
+                          showInLegend:false,
+                          data: [{x:0, y:{{bids_largest}}},
+                                 {x:0, y:{{bids_largest}}*1000000000}
+                                ]
+                          },
+                          {
+                          name: 'winner_point',
+                          showInLegend:false,
+                          color: '#000000',
+                          data: [
+                                {x:1, y:{{bids_largest}},
+                                 marker: {
+                                        enabled:true,
+                                        symbol: 'circle',
+                                        radius: 6
+                                        },
+                                 dataLabels:{
+                                        enabled: true,
+                                        align: 'left',
+                                        format: 'Winner Bid Price: ${y}'
+                                        },
+                                 }]
+                          }
+                        ]
+                    {% else %}
+                        series: [{
+                          name: 'Supply Curve',
+                          data: {{bids_graph}},
+                          step: true
+                          },
+                          {
+                          name: 'vertical_line_min',
+                          showInLegend:false,
+                          data: [{x:0, y:{{bids_smallest}}},
+                                 {x:0, y:0}
+                                ]
+                          },
+                          {
+                          name: 'vertical_line_max',
+                          showInLegend:false,
+                          data: [{x:{{num_players}}, y:{{bids_largest}}},
+                                 {x:{{num_players}}, y:{{bids_largest}}*1000000000}
+                                ]
+                          },
+                          {
+                          name: 'winner_point',
+                          showInLegend:false,
+                          color: '#000000',
+                          data: [
+                                {x:1, y:{{bids_smallest}},
+                                 marker: {
+                                        enabled:true,
+                                        symbol: 'circle',
+                                        radius: 6
+                                        },
+                                 dataLabels:{
+                                        enabled: true,
+                                        align: 'left',
+                                        format: 'Winner Ask Price: ${y}'
+                                        },
+                                 }]
+                          }
+                        ]
+                    {% endif %}
+              }, function(chart) {
+
+                $("#slider-range").slider({
+                    orientation: "vertical",
+                  range: true,
+                  min: 0,
+                  max: {{bids_largest}}+{{bids_smallest}}+1,
+                  values: [0, {{bids_largest}}+{{bids_smallest}}+1],
+                  slide: function(event, ui) {
+                    $("#amount_l").val(ui.values[0]);
+                    $("#amount_h").val(ui.values[1]);
+                    chart.yAxis[0].setExtremes(ui.values[0] - 0, ui.values[1] - 0)
+                  }
+                });
+                $("#amount_l").val($("#slider-range").slider("values", 0));
+                $("#amount_h").val($("#slider-range").slider("values", 1))
+              });
+             });
+            </script>
+
+            <div style="max-height:40vh; overflow: scroll;">
+                <table class="table" style="width:400px">
+                    <tr>
+                        {% if 'demand' in session.config.experiment %}
+                            <th>List of bid prices</th>
+                        {% else %}
+                            <th>List of ask prices</th>
+                        {% endif %}
+                    </tr>
+                    <tbody>
+                         {% for b in bids_sorted %}
+                    <tr>
+                        <td>{{ b }}</td>
+                    </tr>
+                         {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+<p></p>
+            <div style="max-height:40vh; overflow: scroll;">
+                <table class="table" style="width:400px">
+                     <tr>
+                        <th>Participant ID</th>
+                        {% if 'demand' in session.config.experiment %}
+                            <th>Participant Bid</th>
+                        {% else %}
+                            <th>Participant Ask</th>
+                        {% endif %}
+                        <th>Winner</th>
+                        <th>Participant Payoff</th>
+                    </tr>
+                    <tbody>
+                    {% for p in participants %}
+                        <tr>
+                            <td>{{ p.id_in_group }}</td>
+                            <td>{{ p.bid_amount }}</td>
+                            <td>{{ p.is_winner }}</td>
+                            <td>{{ p.payoff }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+             </div>
+
+        {% endif %}
+
+    {% else %}
+
+        <h1>There is nothing to report.</h1>
+
+    {% endif %}
+

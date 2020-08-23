@@ -26,6 +26,22 @@ SESSION_CONFIGS = [
         num_demo_participants=6,
         app_sequence=['umairs_experiment'],
     ),
+    dict(
+        name='demand_and_supply',
+        display_name='Demand and Supply Experiments',
+        num_demo_participants=10,
+        use_browser_bots=False,
+        app_sequence=['demand_and_supply'],
+        experiment='demand',
+        timeout=120,
+        doc="""
+    Enter 'supply' (without quotes) for the 'experiment' parameter if you want to run the Supply Curve Experiment.
+    Otherwise let this parameter remain at its current setting of 'demand' if you want to run the Demand Curve
+    Experiment. Also, you can configure the 'timeout' parameter by entering the amount of time (in seconds) which
+    each player has to submit his/her response. Currently, participants have 120 seconds (i.e. 2 mins) to submit their
+    responses.
+    """
+    )
     ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

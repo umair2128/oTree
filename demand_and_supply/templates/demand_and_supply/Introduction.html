@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+
+    {% if 'demand' in session.config.experiment %}
+        EconPort: Demand Curve Experiment
+    {% else %}
+        EconPort: Supply Curve Experiment
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+    {% if 'demand' in session.config.experiment %}
+        {% include Constants.instructions_template_d %}
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Go to Bid Page</button>
+    {% else %}
+        {% include Constants.instructions_template_s %}
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Go to Ask Page</button>
+    {% endif %}
+
+{% endblock %}
+
