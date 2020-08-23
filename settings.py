@@ -41,6 +41,11 @@ SESSION_CONFIGS = [
     each player has to submit his/her response. Currently, participants have 120 seconds (i.e. 2 mins) to submit their
     responses.
     """
+    ),
+    dict(
+        name='test_live',
+        num_demo_participants=2,
+        app_sequence=['appy']
     )
     ]
 

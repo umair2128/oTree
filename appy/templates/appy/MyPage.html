@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Enter your information
+{% endblock %}
+
+{% block content %}
+
+<table id="history" class="table">
+    <tr>
+      <th>Player</th>
+      <th>Bid</th>
+    </tr>
+  </table>
+  <input id="inputbox" type="number">
+  <button type="button" id="sendbutton">Send</button>
+  
+  <script>
+  
+      let history = document.getElementById('history');
+      let inputbox = document.getElementById('inputbox');
+      let sendbutton = document.getElementById('sendbutton');
+  
+      function liveRecv(payload) {
+  
+          history.innerHTML += '<tr><td>' + payload['id_in_group'] + '</td><td>' + payload['bid'] + '</td></tr>';
+      }
+  
+      sendbutton.onclick = function () {
+          liveSend(parseInt(inputbox.value));
+      };
+  
+  </script>
+
+    Please enter the following information.
+
+
+    {% next_button %}
+
+{% endblock %}
