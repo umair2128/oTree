@@ -1,0 +1,100 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load list_item %}
+
+{% block title %}
+    <div class="card-header mb-4" style="background:#2E7099; color:#DEF0FC">
+        Finished
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card-header mb-3" style="background:#DEF0FC; color:#2E7099">
+        <div style="width:50%; display:inline-block; text-align:left;"></div><div style="width:50%; display:inline-block; text-align:right;"><b>Total Payoff:</b> {{total_payoff}}</div>
+    </div>
+
+    <p>
+        <div>
+            <table class="table table-bordered text-center" id="game_table" style="width: auto; margin: auto">
+                <tr>
+                    <th colspan="2" rowspan="2"></th>
+                    <th colspan="{{ col_action_labels|length }}">{% if player.id_in_group == 1 %}Other{% else %}You{% endif %}</th>
+                </tr>
+                <tr>
+                {% for a in col_action_labels %}
+                    <th id="col_{{ forloop.counter }}"; style="border-collapse:collapse;border-bottom:1px solid #67A0C5;font-weight: normal">{{ a }}</th>
+                {% endfor %}
+                </tr>
+                <th rowspan={{ row_action_labels|length|add:"1" }} class="align-middle"><span>{% if player.id_in_group == 1 %}You{% else %}Other{% endif %}</span></th>
+
+                {% for r in payoffs %}
+                    <tr>
+                        {% for c in r %}
+                            {% if forloop.first %}
+                                <td id="row_{{ forloop.parentloop.counter }}"; style="vertical-align:middle; border-collapse:collapse;border-right:1px solid #67A0C5;">{{ row_action_labels|list_item:forloop.parentloop.counter0 }}</td>
+                            {% endif %}
+                            <td style="vertical-align:middle; border-collapse:collapse; border:1px solid #67A0C5;">
+                                <span {% if player.id_in_group == 1 %}class="payoff_highlight"{% endif %}>{{c.0}}</span> , <span {% if player.id_in_group == 2 %}class="payoff_highlight"{% endif %}>{{c.1}}</span>
+                                <br> ({{ agg_res_inside|list_item:forloop.parentloop.counter0|list_item:forloop.counter0|list_item:2}}, {{ agg_res_inside|list_item:forloop.parentloop.counter0|list_item:forloop.counter0|list_item:3 }}%)
+                            </td>
+                        {% endfor %}
+                        <td style="border-collapse:collapse; border:none; border-right:hidden;"> <br>({{ agg_res_outside_row|list_item:forloop.counter0|list_item:2 }}, {{ agg_res_outside_row|list_item:forloop.counter0|list_item:3 }}%)</td>
+                    </tr>
+                {%  endfor %}
+                <tr>
+                    <td style="border-collapse:collapse; border:none; border-left:hidden; border-bottom:hidden;" colspan="2"></td>
+                    {% for a in col_action_labels %}
+                        <td style="border-collapse:collapse; border:none; border-bottom:hidden;"> <br>({{ agg_res_outside_col|list_item:forloop.counter0|list_item:2 }}, {{ agg_res_outside_col|list_item:forloop.counter0|list_item:3 }}%)</td>
+                    {% endfor %}
+                    <td style="border-collapse:collapse; border:none; border-right:hidden; border-bottom:hidden;"> <br>({{player.round_number}},100%)</td>
+                </tr>
+            </table>
+        </div>
+    </p>
+
+    <div class="card-header mb-3 text-center" style="background:#DEF0FC; color:#2E7099">
+        <b>History Table</b>
+    </div>
+
+    <p>
+        <div class="row justify-content-center" style="max-height:40vh; overflow: scroll;">
+            <table class="table" style="width:500px">
+                <tr>
+                    <th class="text-center">Round</th>
+                    <th class="text-center">You chose</th>
+                    <th class="text-center">Other  chose</th>
+                    <th class="text-center">Your payoff</th>
+                    <th class="text-center">Other payoff</th>
+                </tr>
+                <tbody>
+                {% for p in player.in_all_rounds %}
+                <tr>
+                    <td class="text-center">{{p.round_number}}</td>
+                    <td class="text-center">{% if player.id_in_group == 1 %} {{row_action_labels|list_item:p.own_action}} {% else %} {{col_action_labels|list_item:p.own_action}} {% endif %}</td>
+                    <td class="text-center">{% if player.id_in_group == 1 %} {{col_action_labels|list_item:p.opp_action}} {% else %} {{row_action_labels|list_item:p.opp_action}} {% endif %}</td>
+                    <td class="text-center">{{p.own_payoff}}</td>
+                    <td class="text-center">{{p.opp_payoff}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+         </div>
+    </p>
+
+    <script>
+    $(document).ready(function() {
+        var row_id;
+        var col_id;
+
+        if ( {{ player.id_in_group }} == 1){
+            row_id = {{ player.own_action|add:"1" }};
+            col_id = {{ player.opp_action|add:"1" }};
+        } else {
+            row_id = {{ player.opp_action|add:"1" }};
+            col_id = {{ player.own_action|add:"1" }};
+        }
+    });
+    </script>
+
+{% endblock %}

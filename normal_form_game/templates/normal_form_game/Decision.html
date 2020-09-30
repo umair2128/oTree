@@ -1,0 +1,297 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load list_item %}
+
+{% block title %}
+    <div class="card-header mb-4" style="background:#2E7099; color:#DEF0FC">
+        Your Choice
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Select an action before proceeding</h4>
+      <p>Please select an action by clicking on the relevant button before proceeding.</p>
+    </div>
+    {% endif %}
+
+    <div class="card-header mb-3" style="background:#DEF0FC; color:#2E7099">
+        <div style="width:50%; display:inline-block; text-align:left;"><b>Round</b> {{player.round_number}} <b>of</b> {{session.config.total_rounds}}</div><div style="width:50%; display:inline-block; text-align:right;"><b>Total Payoff:</b> {{total_payoff}}</div>
+    </div>
+
+    <p>
+    <div class="form-group required">
+        <table class="table table-bordered text-center" id="game_table" style="width: auto; margin: auto">
+            <tr>
+                <th colspan="2" rowspan="2"></th>
+                <th colspan="{{ col_action_labels|length }}">{% if player.id_in_group == 1 %}Other{% else %}You{% endif %}</th>
+            </tr>
+            <tr>
+            {% for a in col_action_labels %}
+                {% if player.id_in_group == 1 %}
+                    <th style="border-collapse:collapse;border-bottom:1px solid #67A0C5;font-weight: normal">{{ a }}</th>
+                {% else %}
+                    <th style="border-collapse:collapse;border-bottom:1px solid #67A0C5;font-weight: normal"><button type="button" onclick="action_click(this)" id="{{forloop.counter}}" class="choice">{{ a }}</button></th>
+                {% endif %}
+            {% endfor %}
+            </tr>
+            <th rowspan={{ row_action_labels|length|add:"1" }} class="align-middle"><span>{% if player.id_in_group == 1 %}You{% else %}Other{% endif %}</span></th>
+
+            {% for r in payoffs %}
+                <tr>
+                    {% for c in r %}
+                        {% if forloop.first %}
+                            {% if player.id_in_group == 1 %}
+                                <td style="vertical-align: middle;border-collapse:collapse;border-right:1px solid #67A0C5;"><button type="button" onclick="action_click(this)" id="{{forloop.parentloop.counter}}" class="choice">{{ row_action_labels|list_item:forloop.parentloop.counter0 }}</button></td>
+                            {% else %}
+                                <td style="vertical-align: middle;border-collapse:collapse;border-right:1px solid #67A0C5;">{{ row_action_labels|list_item:forloop.parentloop.counter0 }}</td>
+                            {% endif %}
+                        {% endif %}
+                        <td style="vertical-align:middle; border-collapse:collapse; border:1px solid #67A0C5;">
+                            <span {% if player.id_in_group == 1 %}class="payoff_highlight"{% endif %}>{{c.0}}</span> , <span {% if player.id_in_group == 2 %}class="payoff_highlight"{% endif %}>{{c.1}}</span>
+                            <br> ({{ agg_res_inside|list_item:forloop.parentloop.counter0|list_item:forloop.counter0|list_item:0}}, {{ agg_res_inside|list_item:forloop.parentloop.counter0|list_item:forloop.counter0|list_item:1 }}%)
+                        </td>
+                    {% endfor %}
+                    <td style="border-collapse:collapse; border:none; border-right:hidden;" class="no_highlight"> <br>({{ agg_res_outside_row|list_item:forloop.counter0|list_item:0 }}, {{ agg_res_outside_row|list_item:forloop.counter0|list_item:1 }}%)</td>
+                </tr>
+            {%  endfor %}
+            <tr>
+                <td style="border-collapse:collapse; border:none; border-left:hidden; border-bottom:hidden;" colspan="2"></td>
+                {% for a in col_action_labels %}
+                    <td style="border-collapse:collapse; border:none; border-bottom:hidden;" class="no_highlight"> <br>({{ agg_res_outside_col|list_item:forloop.counter0|list_item:0 }}, {{ agg_res_outside_col|list_item:forloop.counter0|list_item:1 }}%)</td>
+                {% endfor %}
+                <td style="border-collapse:collapse; border:none; border-right:hidden; border-bottom:hidden;" class="no_highlight"> <br>{% if player.round_number != 1 %}({{player.round_number|add:"-1"}},100%) {% else %} (0,0%) {% endif %}</td>
+            </tr>
+            </table>
+    </div>
+    </p>
+    <input type="hidden" id="decision" name="action_distribution" />
+    <p><button id="new_submit" class="otree-btn-next btn btn-primary next-button otree-next-button">Submit</button></p>
+
+    {% if player.round_number != 1 %}
+    <div class="card-header mb-3 text-center" style="background:#DEF0FC; color:#2E7099">
+        <b>History Table</b>
+    </div>
+
+    <p>
+        <div class="row justify-content-center" style="max-height:40vh; overflow: scroll;">
+            <table class="table" style="width:500px">
+                <tr>
+                    <th class="text-center">Round</th>
+                    <th class="text-center">You chose</th>
+                    <th class="text-center">Other chose</th>
+                    <th class="text-center">Your payoff</th>
+                    <th class="text-center">Other payoff</th>
+                </tr>
+                <tbody>
+                {% for p in player.in_previous_rounds %}
+                <tr>
+                    <td class="text-center">{{p.round_number}}</td>
+                    <td class="text-center">{% if player.id_in_group == 1 %} {{row_action_labels|list_item:p.own_action}} {% else %} {{col_action_labels|list_item:p.own_action}} {% endif %}</td>
+                    <td class="text-center">{% if player.id_in_group == 1 %} {{col_action_labels|list_item:p.opp_action}} {% else %} {{row_action_labels|list_item:p.opp_action}} {% endif %}</td>
+                    <td class="text-center">{{p.own_payoff}}</td>
+                    <td class="text-center">{{p.opp_payoff}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+         </div>
+    </p>
+    {% endif %}
+
+    <p><button type="button" class="btn btn-secondary" onclick="show_hide_inst()">Show/Hide Instructions</button></p>
+
+    <div id="inst_text">
+        <div class="card bg-light m-3">
+            <div class="card-body">
+
+                <h3>
+                    Instructions
+                </h3>
+
+                <link rel="stylesheet" type="text/css"
+                      href="{% static 'global/matrix.css' %}"/>
+
+                <p>
+                    In this study, you will be randomly and anonymously paired with another
+                    participant.
+                    Each of you simultaneously and privately chooses from
+
+                    whether you want to
+                    cooperate or defect.
+                    Your payoffs will be determined by the choices of both as below:
+                </p>
+                <p><i>In each cell, the amount to the left is the payoff for
+                    you and to the right for the other participant.</i></p>
+
+                <table class='table table-bordered text-center'
+                       style='width: auto; margin: auto'>
+                    <tr>
+                        <th colspan=2 rowspan=2></th>
+                        <th colspan=2>The Other Participant</th>
+                    </tr>
+                    <tr>
+                        <th>Cooperate</th>
+                        <th>Defect</th>
+                    </tr>
+                    <tr>
+                        <th rowspan=2><span style="transform: rotate(-90deg);">You</span></th>
+                        <th>Cooperate</th>
+                        <td> ,  </td>
+                        <td> ,  </td>
+                    </tr>
+                    <tr>
+                        <th>Defect</th>
+                        <td> , </td>
+                        <td> ,  </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .payoff_highlight {
+            font-weight: bold;
+        }
+
+        .choice {
+            background:#D4E6F1;
+            width: 100%;
+            border: none;
+            padding: 8px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+            transition-duration: 0.2s;
+            outline: none !important;
+            box-shadow: none !important;
+            margin-top: 0%;
+            margin-bottom: 0%;
+            cursor: pointer;
+        }
+        .choice:hover {
+            background-color:#67A0C5;
+        }
+
+        .selected {
+            background:#7FB3D5;
+            transition-duration: 0.2s;
+        }
+        .chosen {
+            background:#2E7099;
+            color: white;
+            width: 100%;
+            border: none;
+            padding: 8px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+            transition-duration: 0.2s;
+            outline: none !important;
+            box-shadow: none !important;
+            margin-top: 0%;
+            margin-bottom: 0%;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+
+        $(document).ready(function() {
+            $("#new_submit").prop("disabled",true);
+        });
+
+        window.onload = function() {
+            document.getElementById('inst_text').style.display = 'none';
+        };
+
+        function action_click(elem){
+
+            // record current selection (as JSON) in hidden field
+            var action = new Array(4).fill(0);
+            action[elem.id - 1] = 1
+            var JSON_action = JSON.stringify(action); // Likely not needed for current case, but good practice
+            $("input#decision").val(JSON_action);
+
+            // un-highlight the elements common to both row and col
+            $(".choice_1").removeClass('chosen');
+            $(".choice_2").removeClass('chosen');
+            $(".choice_3").removeClass('chosen');
+            $(".choice_4").removeClass('chosen');
+
+            // un-highlight all action buttons
+            $(".choice").removeClass('chosen');
+
+            // un-highlight role-specific elements
+            if ({{ player.id_in_group }} === 1)
+            {
+                // row player
+                $("td").removeClass('selected');
+            }
+            else {
+                // col player
+                $('th').removeClass('selected');
+                $('td').removeClass('selected');
+            }
+
+            // highlight current selection
+            $(elem).addClass("chosen");
+            if ({{ player.id_in_group }} == 1)
+            {
+                // row player
+                var row_part = $(elem).closest('tr');
+                row_part.find('td:not(:nth-last-child(-n+1))').each(function() {
+                    $(this).closest('td').addClass('selected');
+                });
+            }
+            else {
+                // col player
+                $(elem).addClass('chosen');
+                $(elem).closest('th').addClass('selected');
+                $('#game_table > tbody > tr').each(function (i, tr){
+                    $(tr).find('td').eq(elem.id).addClass('selected');
+                });
+            }
+            // unhighlight cell in the last row for action selected by the column player
+            $("td.no_highlight").each(
+                function(){
+                    $(this).removeClass('selected');
+                }
+            );
+            $("#new_submit").prop("disabled",false);
+        }
+
+    </script>
+
+    <script>
+    function show_hide_inst() {
+      var x = document.getElementById('inst_text');
+      if (x.style.display === 'none') {
+        x.style.display = 'block';
+      } else {
+        x.style.display = 'none';
+      }
+    }
+    </script>
+
+{#    <script>#}
+{#    window.onload = function() {#}
+{#      document.getElementById('inst_text').style.display = 'none';#}
+{#    };#}
+{#    </script>#}
+
+    <style>
+      .otree-form-errors {
+        visibility: hidden;
+        display: none;
+    }
+    </style>
+
+{% endblock %}
